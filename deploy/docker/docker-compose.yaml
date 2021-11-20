@@ -1,0 +1,26 @@
+version: '3'
+services:
+    base_python:
+        container_name: base_python
+        build:
+            context: $PWD/
+            dockerfile: deploy/docker/python.Dockerfile
+            args:
+                - BASE_IMAGE_FULLNAME=reg.navercorp.com/base/centos:centos7
+                - PYTHON_VERSION=3.8.5
+                - CONDA_ENV_NAME=py38
+        image: reg.navercorp.com/pai/personal-why/http_test_server_py/python:${IMAGE_TAG_VERSION}
+        entrypoint: [ "/bin/bash" ]
+        command: [ "-c", "python --version" ]
+    main:
+        container_name: http_test_server
+        ports:
+            - "8000:8000"
+        build:
+            context: $PWD/
+            dockerfile: deploy/docker/Dockerfile
+            args:
+                - BASE_IMAGE_FULLNAME=reg.navercorp.com/pai/personal-why/http_test_server_py/python:${IMAGE_TAG_VERSION}
+        image: reg.navercorp.com/pai/personal-why/http_test_server_py/main:${IMAGE_TAG_VERSION}
+        entrypoint: [ "/bin/bash" ]
+        command: [ "-c", "make start.deploy" ]
