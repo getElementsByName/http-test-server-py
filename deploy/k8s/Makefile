@@ -5,16 +5,17 @@ ADDITIONAL_OPTIONS=
 
 cluster.set.development.ad1:
 	ncc cluster set pai-playground@ad1
-cluster.set.production.crg1:
-	ncc cluster set pdp-ml@crg1
+cluster.set.staging.cr1:
+	ncc cluster set pai-staging@cr1
 cluster.set.production.cr1:
-	ncc cluster set pdp-ml@cr1
+	ncc cluster set pai@cr1
 
 HELM_CLI=/usr/bin/helm
+HELM_CLI=/usr/local/bin/helm
 # HELM_CLI=ncc helm
 deploy.development: cluster.set.development.ad1
 	$(HELM_CLI) upgrade --install $(COMMON_OPTIONS) $(RELEASE_NAME) ./
-deploy.production: cluster.set.production.cr1
+deploy.staging: cluster.set.staging.cr1
 	$(HELM_CLI) upgrade --install $(COMMON_OPTIONS) $(RELEASE_NAME) ./
 
 
